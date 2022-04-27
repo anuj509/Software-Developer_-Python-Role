@@ -6,6 +6,10 @@ from .serializers import RouterSerializer
 from .utils import StandardResponse,InputValidation,InputDetails
 from django.utils import timezone
 
+
+def index(request):
+    """View function for home page of site."""
+    return render(request, 'index.html')
 class RouterMain(APIView):
     """
     View to list all Routers and create new router entry in the system.
@@ -15,7 +19,7 @@ class RouterMain(APIView):
         Return a list of routers.
         """
         try:
-            routers = Router.objects.all().order_by("-created_at")
+            routers = Router.objects.filter(deleted_at=None).order_by("-created_at")
             routerSerializer = RouterSerializer(routers, many=True)
 
         except Exception as e:
@@ -42,7 +46,7 @@ class RouterMain(APIView):
         serializer = RouterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return StandardResponse.Response(False,"Router saved successfully.",serializer.data)    
+            return StandardResponse.Response(True,"Router saved successfully.",serializer.data)    
         emessage=serializer.errors
         return StandardResponse.Response(False,"Router could not be saved.",emessage)
 

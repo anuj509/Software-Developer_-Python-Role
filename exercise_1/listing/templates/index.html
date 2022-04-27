@@ -1,0 +1,285 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'listing/favicon.ico' %}">
+
+    <title>Router Management</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'listing/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'listing/css/starter-template.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Router Management</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+
+
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+
+        <div class="starter-template">
+
+            <body>
+                <a href="javascript:void(0)" class="btn btn-primary float-right add-model"> Add Router </a></div>
+                <table id="router_list_table" class="display">
+                    <thead>
+                        <tr>
+                            <th>SAP ID</th>
+                            <th>Host Name</th>
+                            <th>Loopback</th>
+                            <th>Mac Address</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+
+        </div>
+
+    </main><!-- /.container -->
+    <div class="modal fade" id="edit-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="userCrudModal"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form" name="update-form" class="form-horizontal">
+                        <input type="hidden" name="id" id="id">
+                        <div class="form-group">
+                            <label for="sap_id" class="col-sm-2 control-label">SAP ID</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="sap_id" name="sap_id" placeholder="Enter SAP ID"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hostname" class="col-sm-2 control-label">Hostname</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="hostname" name="hostname" placeholder="Enter Hostname"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loopback" class="col-sm-2 control-label">Loopback</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="loopback" name="loopback" placeholder="Enter Loopback"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loopback" class="col-sm-2 control-label" style="max-width: unset;">Enter Mac Address</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="mac_address" name="mac_address" placeholder="Enter Mac Address"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="btn-save" value="create">Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="add-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="userCrudModal"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="add-form" name="add-form" class="form-horizontal">
+                        <input type="hidden" class="form-control" id="mode" name="mode" value="add">
+                        <div class="form-group">
+                            <label for="sap_id" class="col-sm-2 control-label">SAP ID</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" name="sap_id" placeholder="Enter SAP ID"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hostname" class="col-sm-2 control-label">Hostname</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" name="hostname" placeholder="Enter Hostname"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loopback" class="col-sm-2 control-label">Loopback</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" name="loopback" placeholder="Enter Loopback"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loopback" class="col-sm-2 control-label" style="max-width: unset;">Enter Mac Address</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" name="mac_address" placeholder="Enter Mac Address"
+                                    value="" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="btn-save" value="create">Save changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- <script>window.jQuery || document.write('<script src="{% static 'assets/js/vendor/jquery-slim.min.js' %}"><\/script>')</script> -->
+    <script src="{% static 'listing/assets/js/vendor/popper.min.js' %}"></script>
+    <script src="{% static 'listing/dist/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        function drawTable(){
+            $.ajax({
+                'url': "/routers/",
+                'method': "GET",
+                'contentType': 'application/json'
+            }).done(function (data) {
+                console.log(data);
+                $('#router_list_table').dataTable({
+                    "processing": true,
+                    // "serverSide": true,
+                    "aaData": data.data,
+                    "columns": [
+                        { "data": "sap_id" },
+                        { "data": "hostname" },
+                        { "data": "loopback" },
+                        { "data": "mac_address" },
+                        {
+                            mRender : function(data,type,row){
+                                return '<a href="javascript:void(0)" class="btn btn-primary btn-edit" data-id="'+row.id+'"> Edit </a> <a href="javascript:void(0)" class="btn btn-danger btn-delete ml-2" data-id="'+row.id+'"> Delete </a>'
+                            }
+                        }
+                    ]
+                })
+            })
+        }
+        
+        $(document).ready(function () {
+            drawTable();
+            // $('#table_id').DataTable();
+        });
+        
+        /*  add user model */
+        $('.add-model').click(function () {
+            $('#add-modal').modal('show');
+        });
+        // add form submit
+        $('#add-form').submit(function (e) {
+            e.preventDefault();
+            // ajax
+            $.ajax({
+                url: "routers/",
+                type: "POST",
+                data: $(this).serialize(), // get all form field value in serialize form
+                success: function (resp) {
+                    // var oTable = $('#router_list_table').dataTable();
+                    // oTable.fnDraw(false);
+                    if(resp.status){
+                        drawTable();
+                        $('#add-modal').modal('hide');
+                        $('#add-form').trigger("reset");
+                    }else{
+                        alert(resp.message);
+                    }
+                }
+            });
+        });
+        /* edit user function */
+        $('body').on('click', '.btn-edit', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/router/"+id+"/",
+                type: "GET",
+                data: {
+                    id: id,
+                    mode: 'edit'
+                },
+                dataType: 'json',
+                success: function (result) {
+                    // $('#id').val(result.id);
+                    // $('#sap_id').val(result.sap_id);
+                    // $('#email').val(result.email);
+                    Object.keys(result.data).forEach((key,idx) => {
+                        $('#'+key).val(result.data[key]);
+                    });
+                    $('#edit-modal').modal('show');
+                }
+            });
+        });
+        // add form submit
+        $('#update-form').submit(function (e) {
+            e.preventDefault();
+            // ajax
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/router/"+id+"/",
+                type: "PATCH",
+                data: $(this).serialize(), // get all form field value in serialize form
+                success: function () {
+                    // var oTable = $('#router_list_table').dataTable();
+                    // oTable.fnDraw(false);
+                    if(resp.status){
+                        drawTable();
+                        $('#edit-modal').modal('hide');
+                        $('#update-form').trigger("reset");    
+                    }else{
+                        alert(resp.message);
+                    }
+                }
+            });
+        });
+        /* DELETE FUNCTION */
+        $('body').on('click', '.btn-delete', function () {
+            var id = $(this).data('id');
+            if (confirm("Are You sure want to delete !")) {
+                $.ajax({
+                    url: "/router/"+id+"/",
+                    type: "DELETE",
+                    success: function (result) {
+                        // var oTable = $('#router_list_table').dataTable();
+                        drawTable();
+                        oTable.fnDraw(false);
+                    }
+                });
+            }
+            return false;
+        });
+    </script>
+</body>
+
+</html>
