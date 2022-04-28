@@ -23,7 +23,7 @@
 <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">Router Management with Ajax based CRUD</a>
+        <a class="navbar-brand" href="#">Router Management</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -64,9 +64,9 @@
                 </div>
                 <div class="modal-body">
                     <form id="update-form" name="update-form" class="form-horizontal">
-                        <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="loopback" id="loopback">
                         <div class="form-group">
-                            <label for="sap_id" class="col-sm-2 control-label">SAP ID</label>
+                            <label for="sap_id" class="col-sm-2 control-label" style="max-width: unset;">SAP ID</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="sap_id" name="sap_id" placeholder="Enter SAP ID"
                                     value="" required>
@@ -79,13 +79,13 @@
                                     value="" required>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="loopback" class="col-sm-2 control-label">Loopback</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="loopback" name="loopback" placeholder="Enter Loopback"
                                     value="" required>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="loopback" class="col-sm-2 control-label" style="max-width: unset;">Enter Mac Address</label>
                             <div class="col-sm-12">
@@ -114,7 +114,7 @@
                     <form id="add-form" name="add-form" class="form-horizontal">
                         <input type="hidden" class="form-control" id="mode" name="mode" value="add">
                         <div class="form-group">
-                            <label for="sap_id" class="col-sm-2 control-label">SAP ID</label>
+                            <label for="sap_id" class="col-sm-2 control-label" style="max-width: unset;">SAP ID</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" name="sap_id" placeholder="Enter SAP ID"
                                     value="" required>
@@ -163,6 +163,12 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
+        var token = localStorage.getItem("access");
+        console.log(token);
+        function tokenExpired(token) {
+            const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+            return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+        }
         var rows = [];
         function ReFetch(){
             $.ajax({
@@ -183,10 +189,14 @@
             $.ajax({
                 'url': "/routers/",
                 'method': "GET",
-                'contentType': 'application/json'
+                'contentType': 'application/json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+token);
+                },
             }).done(function (data) {
                 console.log(data);
                 rows = data.data;
+                // console.log(rows);
                 $('#router_list_table').dataTable({
                     "processing": true,
                     // "serverSide": true,
@@ -198,7 +208,7 @@
                         { "data": "mac_address" },
                         {
                             mRender : function(data,type,row){
-                                return '<a href="javascript:void(0)" class="btn btn-primary btn-edit" data-id="'+row.id+'"> Edit </a> <a href="javascript:void(0)" class="btn btn-danger btn-delete ml-2" data-id="'+row.id+'"> Delete </a>'
+                                return '<a href="javascript:void(0)" class="btn btn-primary btn-edit" data-id="'+row.loopback+'"> Edit </a> <a href="javascript:void(0)" class="btn btn-danger btn-delete ml-2" data-id="'+row.loopback+'"> Delete </a>'
                             }
                         }
                     ]
@@ -207,8 +217,29 @@
         }
         
         $(document).ready(function () {
-            drawTable();
-            // $('#table_id').DataTable();
+            if(token!=null){
+                // var parsedJWT = parseJwt(token);
+                if(tokenExpired(token)){
+                    var refresh = localStorage.getItem("refresh");
+                    $.ajax({
+                            url: "/api/auth/token/refresh",
+                            type: "POST",
+                            data: {"refresh":refresh}, // get all form field value in serialize form
+                            success: function (resp) {
+                                if(resp.access){
+                                    localStorage.setItem("access", resp.access);
+                                    localStorage.setItem("refresh", resp.refresh);
+                                    window.location = "/home/";
+                                }else{
+                                    alert(resp.detail);
+                                }
+                            }
+                    });
+                    
+                }else{
+                    drawTable();
+                }
+            }
         });
         
         /*  add user model */
@@ -223,6 +254,9 @@
                 url: "routers/",
                 type: "POST",
                 data: $(this).serialize(), // get all form field value in serialize form
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+token);
+                },
                 success: function (resp) {
                     // var oTable = $('#router_list_table').dataTable();
                     // oTable.fnDraw(false);
@@ -239,19 +273,20 @@
         /* edit user function */
         $('body').on('click', '.btn-edit', function () {
             var id = $(this).data('id');
+            console.log(id);
             $.ajax({
                 url: "/router/"+id+"/",
                 type: "GET",
-                data: {
-                    id: id,
-                    mode: 'edit'
-                },
                 dataType: 'json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+token);
+                },
                 success: function (result) {
                     // $('#id').val(result.id);
                     // $('#sap_id').val(result.sap_id);
                     // $('#email').val(result.email);
                     Object.keys(result.data).forEach((key,idx) => {
+                        // console.log(key);
                         $('#'+key).val(result.data[key]);
                     });
                     $('#edit-modal').modal('show');
@@ -262,11 +297,15 @@
         $('#update-form').submit(function (e) {
             e.preventDefault();
             // ajax
-            var id = $(this).data('id');
+            var id = $("#loopback").val();
+            console.log(id);
             $.ajax({
                 url: "/router/"+id+"/",
                 type: "PATCH",
                 data: $(this).serialize(), // get all form field value in serialize form
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+token);
+                },
                 success: function (resp) {
                     // var oTable = $('#router_list_table').dataTable();
                     // oTable.fnDraw(false);
@@ -287,6 +326,9 @@
                 $.ajax({
                     url: "/router/"+id+"/",
                     type: "DELETE",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+token);
+                    },
                     success: function (resp) {
                         // var oTable = $('#router_list_table').dataTable();
                         if(resp.status){
