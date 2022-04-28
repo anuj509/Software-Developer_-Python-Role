@@ -60,7 +60,7 @@ use top. Once top is running, press the M key - this will sort applications by t
 -   if memory usage seems business-as-usual: add RAM to the server, or split high-memory using services to other servers.
 ## Screenshots
 
-![Troubleshoot Flow Diagram]('slow server troubleshooting.png')
+![Troubleshoot Flow Diagram](slow-server-troubleshooting.png)
 
 
 ## 5. Create a view from query
