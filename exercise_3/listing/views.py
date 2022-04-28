@@ -1,3 +1,4 @@
+from functools import reduce
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -7,6 +8,9 @@ from .models import Router
 from .serializers import RouterSerializer
 from .utils import StandardResponse,InputValidation,InputDetails
 from django.utils import timezone
+import operator
+from django.db.models import Q
+from ipaddress import ip_address
 
 
 def index(request):
@@ -27,13 +31,46 @@ class RouterMain(RetrieveAPIView):
         """
         Return a list of routers.
         """
+        device_type = request.query_params.get("devicetype")
+        ip_range = request.query_params.getlist('ip_range')
+        # could not find valid format for sapid hence applying logic is sap_id is 1/1/12:1 then 12 is filter value for device type if ag1 then range 1 to 6 else device type is assumed css
+        rangeVal = []
+        print(device_type)
+        if device_type=="ag1":
+            rangeVal = [i for i in range(6)]
+        else:
+            rangeVal = [i for i in range(7,13)]    
         try:
-            routers = Router.objects.filter(deleted_at=None).order_by("-created_at")
+            print(rangeVal)
+            if device_type:
+                if len(ip_range)==0:
+                    routers = Router.objects.filter(reduce(operator.or_, (Q(sap_id__contains="/"+str(val)+":") for val in rangeVal)),deleted_at=None).order_by("-created_at")
+                else:
+                    # ip_addresses = self.findIPs(ip_range[0],ip_range[1])
+                    routers = Router.objects.filter(reduce(operator.or_, (Q(sap_id__contains="/"+str(val)+":") for val in rangeVal)),loopback__gte=ip_range[0], loopback__lte=ip_range[1], deleted_at=None).order_by("-created_at")    
+            else:
+                if len(ip_range)==0:
+                    routers = Router.objects.filter(deleted_at=None).order_by("-created_at")
+                else:
+                    # print(ip_range)
+                    # ip_addresses = self.findIPs(ip_range[0],ip_range[1])
+                    # print(ip_addresses)
+                    routers = Router.objects.filter(loopback__gte=ip_range[0], loopback__lte=ip_range[1],deleted_at=None).order_by("-created_at")
             routerSerializer = RouterSerializer(routers, many=True)
 
         except Exception as e:
             return StandardResponse.Response(False,"Routers not found ",str(e))    
         return StandardResponse.Response(True,"Router list ",routerSerializer.data)
+    
+
+    # def findIPs(self, start, end):
+    #     start = ip_address(start)
+    #     end = ip_address(end)
+    #     result = []
+    #     while start <= end:
+    #         result.append(str(start))
+    #         start += 1
+    #     return result
 
     def post(self, request, format=None):
         """

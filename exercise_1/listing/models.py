@@ -11,7 +11,7 @@ class Router(Model):
     hostname = models.CharField(max_length=14)
     # loopback address range from 127.0.0.1 to 127.255.255.254
     # Reference : https://www.omnisecu.com/tcpip/what-is-loopback-address.php#:~:text=The%20loopback%20network%20in%20IPv4,0.1%20to%20127.255.
-    loopback = models.CharField(max_length=15)
+    loopback = models.GenericIPAddressField(protocol='both', unpack_ipv4=True)
     # Mac Address Rules 
     # Reference : https://www.geeksforgeeks.org/how-to-validate-mac-address-using-regular-expression/
     mac_address = models.CharField(max_length=17)

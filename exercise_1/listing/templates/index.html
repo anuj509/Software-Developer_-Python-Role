@@ -175,7 +175,9 @@
             }).done(function (data) {
                 rows = data.data;
                 $('#router_list_table').dataTable().fnClearTable();
-                $('#router_list_table').dataTable().fnAddData(rows);
+                if(rows.length > 0){
+                    $('#router_list_table').dataTable().fnAddData(rows);
+                }
             });
         }
 
