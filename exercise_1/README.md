@@ -12,7 +12,7 @@ Note: assuming you have connect DB in exercise1/setting.py DATABASES variable.
   pip install requirements.txt
   python manage.py makemigrations
   python manage.py migrate
-  python manage.py create-router
+  python manage.py create-router --n 20
   python manage.py runserver
 ```
 
