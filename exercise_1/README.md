@@ -20,6 +20,7 @@ open localhost:8000 for UI
 
 
 For Pattern Script:
+Note: pip install turtle required to be installed.
 ```bash
    python pattern.py 
 ```
