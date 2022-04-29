@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "12902767-c66a-4325-82b6-2fb7c520f943",
-		"name": "Excercise1",
+		"_postman_id": "cb9c4e35-3a22-4fca-a5e9-4ea0e4b4c52a",
+		"name": "Excercise3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -366,6 +366,210 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"status\": true,\n    \"message\": \"Router Deleted Successfully\"\n}"
+				}
+			]
+		},
+		{
+			"name": "JWT Token Obtain",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"anujs\",\r\n    \"password\":\"mypassword\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/auth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "JWT Token Obtain",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"anujs\",\r\n    \"password\":\"mypassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/auth/token",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 28 Apr 2022 06:27:46 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.7.4"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept"
+						},
+						{
+							"key": "Allow",
+							"value": "POST, OPTIONS"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "438"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1MTIxMzY2NiwianRpIjoiOGFkMzU2NmNiMDhlNDJmMGE1NTNmM2JlMzZmZTdlMzAiLCJ1c2VyX2lkIjoxfQ.TfJcC0js8_TEuvhZOWMio-SyfPZhOHhUH4yl4pxepLw\",\n    \"access\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUxMTI3NTY2LCJqdGkiOiI4ZWI5ZTI5OTA4ZWU0MDA5ODk0NDQ5NTE4MmY4YzZlZSIsInVzZXJfaWQiOjF9.4NSCweGDRh3olsGeiDNcqmJaxqi-d399DCIlr91tGDY\"\n}"
+				}
+			]
+		},
+		{
+			"name": "JWT Refresh Token Obtain",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refresh\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1MTIxMzY2NiwianRpIjoiOGFkMzU2NmNiMDhlNDJmMGE1NTNmM2JlMzZmZTdlMzAiLCJ1c2VyX2lkIjoxfQ.TfJcC0js8_TEuvhZOWMio-SyfPZhOHhUH4yl4pxepLw\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/auth/token/refresh",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"token",
+						"refresh"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "JWT Refresh Token Obtain",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1MTIxMzY2NiwianRpIjoiOGFkMzU2NmNiMDhlNDJmMGE1NTNmM2JlMzZmZTdlMzAiLCJ1c2VyX2lkIjoxfQ.TfJcC0js8_TEuvhZOWMio-SyfPZhOHhUH4yl4pxepLw\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/auth/token/refresh",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"token",
+								"refresh"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 28 Apr 2022 06:32:32 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.7.4"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept"
+						},
+						{
+							"key": "Allow",
+							"value": "POST, OPTIONS"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "218"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"access\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUxMTI3ODUyLCJqdGkiOiI1NDJlNWFlOWQ0ODE0OThlOGI5NTQ0NjA2NzVkMWU1MyIsInVzZXJfaWQiOjF9.3z2zFsJbPuoOF_wnLRZH_JnGRmvu8oJBziC2R9WwZ20\"\n}"
 				}
 			]
 		}
